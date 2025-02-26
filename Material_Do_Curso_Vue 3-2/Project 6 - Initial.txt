@@ -1,0 +1,1 @@
+Não há uma versão inicial para o projeto #6 pois vamos criá-lo juntos desde o zero usando o Vite
