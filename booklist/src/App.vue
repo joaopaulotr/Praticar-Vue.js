@@ -1,19 +1,394 @@
 <script setup>
 
-  let count = 0;
+import Books from '.components.Books.vue';
+import BooksProgress from '.components.BookProgress.vue';
+import BooksProgress from '.components.AddBook.vue';
+import {reactive, ref} from 'vue';
+let books = reactive([
+        {
+          id: 1,
+          title: "History of Europe",
+          cover:
+            "https://printpress.cmsmasters.net/default/wp-content/uploads/sites/11/2019/05/printpress-product-6-540x861.jpg",
+          isRead: true,
+          isbn: "0-395-07157-8",
+          author: "Daniel Trejo",
+        },
+        {
+          id: 2,
+          title: "Penguin Classics",
+          cover:
+            "https://printpress.cmsmasters.net/default/wp-content/uploads/sites/11/2019/05/printpress-product-2-540x861.jpg",
+          isRead: false,
+          isbn: "0-395-07157-8",
+          author: "Daniel Trejo, Jon Snow",
+        },
+        {
+          id: 3,
+          title: "Becoming",
+          cover:
+            "https://printpress.cmsmasters.net/default/wp-content/uploads/sites/11/2019/05/printpress-product-7-540x861.jpg",
+          isRead: false,
+          isbn: "0-395-07157-8",
+          author: "Daniel Trejo",
+        },
+        {
+          id: 4,
+          title: "Sonnets",
+          cover:
+            "https://printpress.cmsmasters.net/default/wp-content/uploads/sites/11/2019/05/printpress-product-5-540x861.jpg",
+          isRead: false,
+          isbn: "0-395-07157-8",
+          author: "Daniel Trejo",
+        },
+      ]);
+
+let showAddBook = ref(false);
+
+function toogleIsRead(id){
+  array.forEach((book) => {
+    if(book.id === id){
+      book.isRead = !book.isRead;
+    }
+  });
+}
+
+function addBook(newBook){
+  newBook.id =  Math.max(...books.map(el => el.id)) + 1;
+ books.push(newBook);
+ showAddBook.value = false;
+}
+
 
 </script>
 
 <template>
-  <div>
-    
-    <h1>{{ count }}</h1>
-    <button @click="count++ ">Incrementar +</button>
+ <div  v-if="!showAddBook"  class="container">
+    <h1>📖 Meus Livros</h1>
+    <div class="header-btns">
+      <button
+        class="btn"
+        @click="showAddBook = true"
+      >
+        Adicionar Livro +
+      </button>
+    </div>
+ 
+    <div class="books-container">
+
+      <Books @toogleIsRead="toogleIsRead" :books="books"/>
+      <BookProgress :books="books"/>
+  
+    </div>
+
 
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <div v-else class="container">
+    <AddBook @addBook="addBook" @closeAddBook="showAddBook = false"/>
+  </div>
+
 </template>
 
 <style scoped>
-
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,500&display=swap");
+ 
+ * {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+   font-family: "Lora", sans-serif;
+ }
+ body {
+   background-color: #d0e2f2;
+ }
+  
+ #app {
+   height: 100vh;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+  
+ /* form input */
+  
+ input:not([type="checkbox"]) {
+   border-color: #dfdfdf;
+   background-color: #fdfcfb;
+   color: #393939;
+   transition: border-color 0.2s ease-in-out;
+   font-size: 16px;
+   line-height: 22px;
+   font-weight: normal;
+   font-style: normal;
+   height: 50px;
+   padding: 0 20px;
+   max-width: 100%;
+   border-width: 1px;
+   border-style: solid;
+   appearance: none;
+   min-width: 100px;
+   width: 100%;
+   border-radius: 25px;
+   margin: 20px 0 0;
+ }
+  
+ .add-form {
+   margin-top: 40px;
+ }
+ .form-control {
+   margin: 20px 0;
+ }
+ .form-control label {
+   display: block;
+ }
+  
+ .form-control-check {
+   display: flex;
+   align-items: center;
+ }
+ .form-control-check label {
+   flex: 1;
+ }
+ .form-control-check input {
+   flex: 2;
+   height: 20px;
+ }
+ .form-control input[type="checkbox"] {
+   width: auto;
+   flex: unset;
+   height: 20px;
+   margin-right: 20px;
+ }
+  
+ input:focus {
+   border-color: #484c53;
+   outline: none;
+ }
+  
+ /* button */
+  
+ .btn {
+   display: inline-block;
+   background: #1cab47;
+   color: #fff;
+   border: none;
+   padding: 10px 20px;
+   margin: 5px;
+   border-radius: 5px;
+   cursor: pointer;
+   text-decoration: none;
+   font-size: 18px;
+   font-family: inherit;
+ }
+ .btn:focus {
+   outline: none;
+ }
+ .btn:active {
+   transform: scale(0.98);
+ }
+ .btn-block {
+   display: block;
+   width: 100%;
+ }
+  
+ /* container */
+  
+ .container {
+   width: 1400px;
+   margin: auto;
+   overflow: auto;
+   min-height: 300px;
+   background-color: #faf8f2;
+   padding: 30px;
+   border-radius: 5px;
+   position: relative;
+   box-shadow: 0px 4px 11px 0px rgb(0 0 0 / 14%);
+ }
+  
+ @media (max-width: 768px) {
+   .container {
+     padding: 60px 30px;
+   }
+ }
+  
+ .container h1 {
+   margin-bottom: 20px;
+ }
+ .container .header-btns {
+   position: absolute;
+   top: 0;
+   right: 10px;
+ }
+  
+ .container .header-btns button {
+   margin-top: 0;
+   border-radius: 0 0 15px 15px;
+ }
+  
+ .container .books-container {
+   margin-top: 50px;
+ }
+  
+ /* table */
+  
+ table {
+   border-spacing: 0;
+   border-collapse: collapse;
+   width: 100%;
+   margin-bottom: 30px;
+   width: 100%;
+   background-color: #fdfcfb;
+ }
+ table th,
+ table td {
+   border-width: 0;
+   border-style: solid;
+   border-bottom-width: 1px;
+   border-bottom-style: solid;
+   padding: 13px 30px;
+ }
+ table tr:first-child td,
+ table tr:first-child th {
+   border-top-width: 1px;
+   border-top-style: solid;
+ }
+ table tr td:first-child,
+ table tr th:first-child {
+   border-left-width: 1px;
+   border-left-style: solid;
+ }
+ table tr td:last-child,
+ table tr th:last-child {
+   border-right-width: 1px;
+   border-right-style: solid;
+ }
+ table.is-style-stripes {
+   border-width: 0;
+   border-style: solid;
+ }
+ table.is-style-stripes tr:nth-child(odd) {
+   background-color: transparent !important;
+ }
+  
+ table tr td,
+ table tr th {
+   padding: 15px 30px;
+ }
+ table tr td,
+ table tr th {
+   text-align: left;
+ }
+  
+ /* books section */
+  
+ .book {
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   text-align: center;
+   position: relative;
+ }
+  
+  
+  
+ .book .book-cover {
+   position: relative;
+ }
+ .book .book-cover img {
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   box-shadow: 0px 4px 11px 0px rgb(0 0 0 / 14%);
+ }
+  
+ .book .book-cover:hover button {
+   visibility: visible;
+   opacity: 1;
+ }
+  
+ .book .book-cover button {
+   visibility: hidden;
+   display: block;
+   position: absolute;
+   transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+   transform: none;
+   width: 100%;
+   left: 0;
+   bottom: 0;
+   text-align: center;
+   opacity: 0;
+   border: none;
+   background-color: rgb(232, 93, 65);
+   color: white;
+   height: 51px;
+   cursor: pointer;
+ }
+  
+ .book .book-cover button.isRead {
+   background-color: #1cab47;
+ }
+  
+ .book .book-cover button span {
+   font-weight: 500;
+   font-size: 18px;
+   margin-left: 10px;
+ }
+  
+ .book .book-title {
+   font-size: 21px;
+   line-height: 27px;
+   margin-bottom: 10px;
+ }
+  
+ .book .book-author {
+   font-size: 19px;
+   line-height: 26px;
+   margin-bottom: 10px;
+ }
+  
+ .book .book-details {
+   padding: 10px 20px;
+   display: flex;
+   flex-direction: column;
+   width: 100%;
+ }
+  
+ .book .readIt {
+   padding: 10px 20px;
+   position: absolute;
+   left: auto;
+   right: 5px;
+   bottom: auto;
+   top: 5px;
+   z-index: 10;
+   border-radius: 25px;
+   overflow: hidden;
+   background-color: #1cab47;
+   color: white;
+ }
+  
+ .books-list {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr 1fr;
+   grid-template-rows: 1fr;
+   gap: 20px;
+ }
+  
+ .books-read {
+   padding-top: 60px;
+   text-align: center;
+ }
+  
+ @media (max-width: 768px) {
+   .books-list {
+     grid-template-columns: 1fr 1fr;
+   }
+ }
+  
+ @media (max-width: 576px) {
+   .books-list {
+     grid-template-columns: 1fr;
+   }
+ }
 </style>
